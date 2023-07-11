@@ -2,18 +2,6 @@ import React, { useState } from 'react';
 import getJoke from '../api/jokeData';
 
 function Home() {
-  // const handleClick = () => {
-  //   setEventText('Display joke here');
-  // };
-  // const [eventText, setEventText] = useState('');
-  // function renderSetup() {
-  //   const array = [];
-  //   getJoke().then((data) => {
-  //     array.push(data.setup);
-  //   }).then(console.warn(array));
-
-  //   setEventText(array);
-  // }
   const [jokeSetup, setJokeSetup] = useState('');
   const [jokeDelivery, setJokeDelivery] = useState('');
 
@@ -27,6 +15,10 @@ function Home() {
     }
   };
 
+  const [logic, setLogic] = useState(false);
+  const [deliveryLogic, setDeliveryLogic] = useState(false);
+  const [initBut, setInitBut] = useState(true);
+
   return (
     <div
       className="text-center d-flex flex-column justify-content-center align-content-center"
@@ -37,10 +29,30 @@ function Home() {
         margin: '0 auto',
       }}
     >
-      <h1>Joke Generator!</h1>
-      <button type="button" onClick={handleJoke}>Get A Joke!</button>
-      <h3 className="watch-event">{jokeSetup || ''}</h3>
-      <h4 className="watch-event">{jokeDelivery || ''}</h4>
+      {
+        logic ? (
+          <div>
+            <h1>{jokeSetup || ''}</h1>
+            <button type="button" onClick={() => { setDeliveryLogic(!deliveryLogic); setLogic(!logic); }}>Get Punchline</button>
+          </div>
+        ) : null
+      }
+      {
+        deliveryLogic ? (
+          <div>
+            <h1>{jokeDelivery || ''}</h1>
+            <button type="button" onClick={() => { setDeliveryLogic(!deliveryLogic); setInitBut(!initBut); }}>Get New Joke</button>
+          </div>
+        ) : null
+      }
+      {
+        initBut ? (
+          <div>
+            <h1>Joke Generator</h1>
+            <button type="button" onClick={() => { setInitBut(!initBut); handleJoke(); setLogic(!logic); }}>Get Joke</button>
+          </div>
+        ) : null
+      }
     </div>
   );
 }
